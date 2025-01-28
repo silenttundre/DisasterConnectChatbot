@@ -1,0 +1,305 @@
+[FAQ:]
+Why aren't there new updates on an incident?
+We release any and all vetted intelligence within minutes after we receive it.  This information comes from either incident command over the radio scanner or official posts from sheriffs, fire departments, USFS, etc.  There are many times, especially on an extended incident, where information goes dark and radio chatter becomes quiet.
+We understand this can be frustrating because it’s frustrating for us too.  We have over a hundred volunteers spending their days constantly listening, communicating directly with officials, and still coming up blank. We would like you to join us in urging our local officials to release more information to help keep everyone informed and calm our nerves during these incredibly difficult times.
+Finally, although we never take information directly from the public, if you see posts from officials like sheriffs or fire departments on social media that you think we should be sharing with Watch Duty users please feel free to send the link our way. 
+
+What do RV, PR, CS, NW, and CR mean?
+These terms are specific to the Central Oregon Interagency Dispatch Center and represent the division the fire is in.
+RV - Rivers
+PR - Prairie
+CS - Cascade
+NW - Newberry
+CR - Crescent
+<image>coidc-map.jpg</image>
+
+What are Silent Incidents?
+Silent incidents are fires that we are monitoring but are not considered a threat to the entire community at this time. They are displayed on Watch Duty as a small bell with a line through it, indicating it is silent and we are currently monitoring.  
+<image>silent_incident_bell.jpg</image>
+If this incident becomes a threat to the larger community we will upgrade this incident and push notifications will be sent. 
+ 
+Opt-in to receive notifications for silent incidents
+If you would like to be notified of these incidents in your county can subscribe in the 'Notifications' section of the left hand menu.  There can set more fine grained controls and get notified of these smaller incidents early.
+
+Why don’t I see my photo in Watch Duty?
+The photos you submit are moderated by our reporters. We can’t include every photo we receive. Your photo might not have been reviewed by our reporters yet, or it might not be approved based on multiple factors, like whether we already have a similar photo.
+
+What does ROS, IC, etc stand for?
+
+Air ops - All aerial resources on the fire from air tankers to helicopters
+ATGS - Air Tactical Group Supervisor, oversees all aerial firefighting ops.
+Backfire - Fire set in front of a wildfire to burn off fuels and stop the fire.
+Backburn - See Backfire
+Bambi Bucket - Collapsible bucket used to drop water or retardant on a fire
+Balance - (The balance), the remaining units either on scene or en route
+Complex - Two or more fires under a single Incident Commander (IC)
+Crowning Fire - Fire that burns through the tops of trees, heavy brush is also capable
+CWN - Call When Needed, air tanker on a 24 or 48-hour call back
+Dozer - Bulldozer used to construct a line to prevent the fire from spreading
+Dozer tender - Support vehicle, carries extra supplies (oil, tools, etc.) for the dozer
+Extended Attack - Fire that will require extensive resources and time, typically >24 hr
+Fire Shelter - Portable last resort for surviving a burn over.
+Flank - The sides of the fire,
+Flanking fire - Fire that spreads along the flanks instead of in the direction of the head
+Flashy Fuels - Light fuels that ignite quickly, typically grass, leaves, etc.
+Forward ROS - The forward movement of the fire, when stopped the fire is in a good place
+Hand crew - A crew of 20 people who use handheld tools to construct a fire line
+Head - The most rapidly spreading portion of a fire
+Heavy Fuels - Large diameter fuels, down logs, timber, opposite of flashy fuels
+Helispot - Take off and landing spot for a helicopter, either man-made or natural
+Helitack - Fire crew that uses helicopters, all Cal Fire helos have Helitack crews
+Hotshot - The elite of firefighting highly trained and go where no other units can
+IC - Incident Commander, the person in charge of the fire
+ICS - Incident Command System, the system used to manage all incidents
+IMT - Incident management team, the team brought to manage large incidents
+Initial Attack - The first attack on the fire to attempt to knock it down.
+Ladder Fuels - Fuels that assist a ground fire in spreading to the canopy
+Lead Plane - Aircraft that shows air tankers the drop and then leads them into it
+Longline - A 100’-200’ line used to lower personnel (Henry 1) or supplies.
+MAFFS - Modular Airborne Fire Fighting System, used when no tankers are available
+Mop - up-The often-long process of ensuring the fire is 100% extinguished
+Mutual Aid - Aid from one department to another in a time of need
+Red Flag - Any fire that starts will spread quickly and rapidly, extra caution needed
+ROS - Rate of Spread, slow (least severe), moderate, high, critical/dangerous
+SEAT - Single Engine Air Tanker, not commonly used in our area
+Size - up-Initial report of what happening including, size, weather, topography, ROS
+Slopover - Fire that spreads outside control lines
+Strike Team - See below for strike team types
+Support WT - Water tender that only carries water, no pump, and roll,
+Task Force - Pre-established group of resources often prepared for Red Flag days
+Tactical WT - Water tender capable of pump and roll
+Type 1 Airtanker - 3,000 to 4,999 gallons (BAE-146, MD-87, P-3, C-130)
+Type 2 Airtanker - 1,800 to 2,999 gallons (P2V, DC-6)
+Type 3 Airtanker - 800-1,799 gallons (S2T, CL-215, CL-415)
+Type 4 Airtanker - <800 gallons (SEAT)
+Type 1 Engine - Structure fire engine, not designed for wildland, no pump, and roll
+Type 2 Engine - Hybrid Type 1 and Type 3, might have pump and roll
+Type 3 Engine - Engine designed for wildland fire, pump and roll required
+Type 4 Engine - Similar to type 3, smaller but larger tank, pump, and roll
+Type 5 Engine - Similar to a heavy-duty chassis outfitted for firefighting, pump, and roll
+Type 6 Engine - Similar to Type 5, smaller and more maneuverable, pump and roll
+Type 7 Engine - Similar to Type 6, less water capacity, pump, and roll
+Type 1 Helicopter - 700-2,500 gallons (S-64, S-70, UH-60, KMAX, CH-47)
+Type 2 Helicopter - 300-699 gallons (UH-1, B-412, B-212, B-205)
+Type 3 Helicopter - <300 gallons (B-407, AS-50, H-125, B-206, MD-500)
+VLAT - Very Large Air Tanker, capacity over 8,000 gallons (DC-10, 747)
+WUI - Wildland Urban Interface, where the wildland meets suburban area
+Water Tender (WT) - Vehicle that carries >1000 gallons of water
+
+Why don’t you report on the causes of fire?
+Our primary objective is reporting on fire activity and not cause. This is so people can have fast and accurate information in case the fire will impact them. Fire causes are often picked up official law enforcement agencies (which includes CALFIRE) with information not available to the public until the investigation is completed. This could be days, months or even years after the event has concluded. We would recommend you contact the agency in charge for additional information on specific fire causes for events you are interested in.
+
+Why don't you report every fire in my area?
+Watch Duty focuses on high-risk vegetation fires and fires that have the potential to become high-risk vegetation fires.
+We will typically not report on:
+Structure fires unless they spread to the vegetation
+Minor fires that are classified by arriving first responders as having slow or no rate of spread within a small area, not threatening structures, and are expected to be handled quickly.
+We will sometimes post fires with negligible risk when there is obvious smoke visible over a large area or aerial resources are present that may be concerning to residents.
+
+Who writes the updates in Watch Duty?
+Contrary to popular belief we are not crowdsourced.  We have over 100 trained volunteers who are either active or retired first responders, dispatchers, paramedics, and reporters.  These men and women work together in real-time to assess the situation and send you updates as the incident unfolds.  Our training and Code of Conduct are extremely important in order to get fast and accurate real-time information to you safely.
+ 
+You can read more about our reporters watchduty.org/reporters
+
+Where do you get your information?
+Our information comes from a myriad of sources that are all publicly available.  First and foremost we listen to live radio chatter between first responders, dispatch, etc.  This is where a lot of real-time intelligence comes from.  You will often see "per scanner traffic" in many of our updates which is referring to this type of information.
+ 
+Just as important we are also watching for updates from local sheriffs, CALFIRE, USFS, etc via Nixle, Facebook, Twitter, and any other medium they are using.  It is important to note that you should always subscribe to your local counties updates as well as Watch Duty.   We do our best to consolidate all of this information in one place but you can never have enough information when it comes to disasters like wildfire.
+ 
+We take the trust people put in us very seriously - we have a strict code of conduct that governs what kind of information we publish and how. Learn more about our code of conduct at watchduty.org/code-of-conduct
+
+Map
+An address or location is incorrect on the map
+OpenStreetMap provides the information for Watch Duty's base map layer, including addresses, streets, structures, and locations.  From time to time the information provided may be outdated or inaccurate.
+Submit An Update
+Go to openstreetmap.org and zoom to the location that needs to be updated.
+Select the Edit button at the top of the screen. Note: You will need to create an account if you have not done so yet.
+Once logged in, in the editor click on the line that represents your street.
+On the left-hand side, all the data of this street is shown and you can correct the name.
+Hit Save on the top right.
+Enter a comment explaining the change you have made(e.g. "corrected street name")
+Select Upload.
+Note: Your street may be represented by several consecutive lines. You need to submit changes for all of them.
+Alternative Method
+Go to openstreetmap.org and zoom to the location that needs to be updated.
+From the tools menu on the right, select Add a note to the map. 
+Move the map marker to the location of the street that needs to be updated.
+Add a comment explaining what needs to be changed or updated. Be as detailed as possible and provide links confirming the change if available. 
+Select Add Note
+
+What is the Air Quality Index (AQI)?
+The EPA and your State environmental agency measure pollution in the air and use the Air Quality Index, or AQI, to report how good or bad the air is.
+Color dots go from Green to Yellow to Orange to Red to Purple to Maroon and number range from 0 to 500.
+The Air Quality Index (AQI) mapping layer can be toggled on and off by tapping on the Layers button from the map and scrolling to the Weather section.
+To turn on or off this layer, tap the Layers button and tap Air Quality Index.
+<image>air_quality_index.jpg</image>
+0-50: Air quality is satisfactory, and air pollution poses little or no risk with 24 hours of exposure.
+51-100: Air quality is acceptable. However, there may be a risk for some people with 24 hours of exposure, particularly those who are unusually sensitive to air pollution.
+101-150: Members of sensitive groups may experience health effects with 24 hours of exposure. The general public is less likely to be affected.
+151-200: Some members of the general public may experience health effects with 24 hours of exposure; members of sensitive groups may experience more serious health effects.
+201-300: Health alert: The risk of health effects is increased for everyone with 24 hours of exposure.
+301 and Higher: Higher Health warning of emergency conditions: everyone is more likely to be affected with 24 hours of exposure.
+
+
+Why are some flame icons on the map gray?
+All active fires have orange flames, and inactive fires have gray flames. We leave a fire active, even when forward progress is stopped. We inactivate it only once we hear the all clear, with units released.
+
+What are the red dots on the map?
+The red colored dots are the the latest hotspots detected by the VIIRS and MODIS heat-detection satellites. We do not have VIIRS and MODIS data for every fire. Where we do have data, this provides a good general sense for where the fire has been over the last 24 hours.
+
+What are the red areas on the map?
+The red-colored areas are the "Active Fire Perimeters", based on the official perimeters provided by CAL FIRE. You can turn these on and off with the layers button.
+
+Why are the incident "flames" on the map sometimes different sizes?
+The size of the flame icon reflects the acreage of the fire. This is only a rough guide, to indicate whether a fire is small, medium or large. For very large fires that have an official CALFIRE perimeter, we show the perimeter on the map as a red shaded area.
+
+How long does a fire stay on the map after it's contained?
+Fires that are marked 100% contained will stay on the map. Once all units are released the fire will be marked inactive. Inactive fires stay on the map for up to 48 hours before being removed.
+
+General
+Layer isn’t working
+Check that the layer in question is enabled by tapping "Layers" at the top right of the map and checking if the toggle to the right of the layer is in the on position.
+
+Some layers are only available to members, and members must be logged in to use them. To see which layers are offered at each membership tier, head to https://www.watchduty.org/join
+
+What is my evacuation zone?
+If you live in a county that uses genasys Protect you can find your evacuation zone by searching for your address here: https://protect.genasys.com/search
+If your county doesn't use genasys Protect, please consult your county's website.
+
+How do I check the app version?
+
+1.  Click on the left-hand side menu (the three bars on the top left)
+2.  At the very bottom you will see a version number.
+3.  How do I update my app?
+
+What states and counties do you cover?
+As of Dec 21, 2024, we report on the following 22 states.
+<image>states_coverage.jpg</image>
+Arizona 
+California
+Colorado
+Idaho
+Oklahoma
+Oregon
+Montana
+Nevada
+New Mexico
+Texas
+Utah
+Washington
+Wyoming
+Hawai’i
+North Dakota
+South Dakota
+Nebraska
+Kansas
+Minnesota
+Iowa
+Missouri
+Arkansas
+
+How do I install Watch Duty on my iPhone or Android device?
+Watch Duty can be downloaded from the Apple and Android stores from the following links.
+
+The Watch Duty map is also available at https://app.watchduty.org but it will NOT send notifications.
+
+How do I update my payment information?
+Open the app
+Click the menu icon, ≡, near the top left of your screen
+Click your name & email address near the bottom of the menu, then "Manage Membership"
+If you see “Login” near the bottom of the menu instead of your name, log in and continue to “Manage Membership”
+
+How do I turn off evacuation zones?
+Evacuation zones cannot be disabled. When there is an active fire in a county, we display all zones in order to educate the public on their zone and make sure they aren’t missed if additional zones are evacuated.
+
+How many devices can I use Watch Duty on?
+You can use your membership on all of your personal devices.
+
+Please note that while your saved places are synced across devices, notifications—for example, counties you are subscribed to—are not. In other words, make sure you are subscribed to counties you’d like notifications for on every device you’re using.
+
+What is the difference between a donation and a membership?
+Your one-time or recurring donations help us offer Watch Duty's critical safety features to non-member users for free.
+
+As a member, not only will you help support our ongoing operations but you will also get access to premium features. Get the details on our different membership tiers here: https://www.watchduty.org/join
+
+How do I log in?
+Open the app
+Click the menu icon, ≡, near the top left of your screen
+Click “Login” near the bottom 
+Having trouble? Check out our “Why can’t I log in?" article.
+
+Why can’t I log in?
+While the critical safety features of Watch Duty are free to all users, only Watch Duty members have accounts with which to log in.
+
+If you have an account but are having trouble accessing it, reset your password.
+
+Please be sure to check your spam folder. If you still haven’t received an email, contact support.
+
+Why am I under an evacuation status?
+We relay evacuation information as it is issued by officials. Any questions regarding evacuation parameters should be directed to the responsible agency - usually the local law enforcement agency, but an Incident Management Team should be also able to assist with your question.
+
+We only use official evacuation information and the source for our evacuation information is always listed in the update, and sometimes in the "Evacuation Notes" section of the relevant incident - such as an evacuation map if one is available. Stay safe.
+
+Why is the fire perimeter missing?
+Updated 1 month ago
+We automatically source our perimeters from the National Interagency Fire Center (NIFC), FIRIS, and various other government sources so the issue is likely with their data; however, we will have one of our reporters and an engineer investigate this and see if we can mitigate the issue with the perimeter on our end.
+
+Do you have collateral for printing?
+Our newsroom offers boilerplate, brand assets, stats, and company information for use in promotional materials: https://www.watchduty.org/about/newsroom
+
+Do you have a phone number for support?
+Unfortunately, as we're a small team with millions of users, we're unable to provide phone support. But you can get answers to many commonly-asked questions right here in our help center, or submit your own and we’ll get back to you shortly: https://support.watchduty.org/hc/en-us/requests/new
+
+How do I update my app?
+You can update your app by visiting the App Store on your phone and click on 'Update'.  
+For iOS: https://apps.apple.com/us/app/watch-duty-wildfire/id1574452924
+For Android: https://play.google.com/store/apps/details?id=org.watchduty.app
+ 
+Enable automatic app updates
+In order to ensure you are always on the most recent version we recommend you enable Automatic App Updates.
+Enabling Automatic Updates on Apple iOS
+Open the Settings app on your iPhone or iPad.
+Scroll down to App Store.
+Enable the App Updates toggle from the Automatic Downloads section.
+Enabling Automatic Updates on Android
+Open the Google Play Store app.
+At the top right, tap the profile icon.
+Tap Settings > Network Preferences > Auto-update apps.
+Select an option:
+Over any network to update apps using either Wi-Fi or mobile data.
+Over Wi-Fi only to update apps only when connected to Wi-Fi.
+
+Does Watch Duty work on a desktop, laptop, or web browser?
+Yes!  You can access Watch Duty on your web browser via app.watchduty.org
+
+My Android app crashes, doesn't load, or I see a white screen
+Open the Settings on your device.
+Tap the Storage heading to open the settings page.
+Tap the Other Apps heading to see a list of your installed app.
+Find the Watch Duty app and tap the Clear Cache and Clear Data/Clear Storage buttons.
+Uninstall the Watch Duty app.
+Re-install the app from the app store.
+If the problem persists, please contact support.
+
+Why is my current location not accurate?
+When using a cellular phone, the accuracy of location services is dependent on how well your phone is receiving GPS signals. Depending on the type of phone you have and the construction of your home it may not work well indoors. It may work better near a window, or more certainly if you take your phone outside. It can take some time for each GPS satellite's signal to be recognized.
+You may have also not given Watch Duty the ability to utilize a precise location, or location accuracy settings on your devices (android only) are not enabled, which can cause your location on the map to be off by a large margin.
+Below are some resources that may help. The titles of these resources aren't fully descriptive, so please look through the links that are relevant to the type of phone you have.
+Apple Devices
+About privacy and Location Services in iOS and iPadOS
+Turn Location Services and GPS on or off on your iPhone or iPad
+Android Devices
+Help your phone get a more accurate location (Google Location Services a.k.a. Google Location Accuracy)
+Find & improve your location’s accuracy
+
+How do I submit photos of fires to Watch Duty?
+To submit photos of active fires and other hazards you must use the iPhone or Android Watch Duty app and take the photo in the app -- you cannot submit photos from your photo gallery.
+Only take photos when you can do so from a safe location, without getting in the way of firefighters and other first responders. 
+On the top right of your app tap the Camera button.
+Type in a description of what you’re looking at and the location. Keep the description short, just the key information.
+Press Submit when you’re done.
+Your photo will now be reviewed by our reporters, who will decide whether to post it along with the incident.  We only post photos that help others see hazards and get a unique perspective on the situation.  
+
+Can I use Watch Duty if I don't have a smart phone?
+You can use access the Watch Duty application from any web browser at app.watchduty.org.
+NOTE: You will not receive notifications for new fires or updates in your web browser. All the fire information is the same as in the app.
