@@ -52,19 +52,54 @@ def send_email(to, subject, body):
     """
     SENDER = "van.lam@cstu.edu"  # Replace with verified sender email
 
-    # HTML email body
+    # HTML email body with proper formatting
     BODY_HTML = f"""
     <html>
-    <head></head>
+    <head>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+            }}
+            .email-container {{
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+            }}
+            .email-header {{
+                font-size: 24px;
+                color: #4CAF50;
+                margin-bottom: 20px;
+            }}
+            .email-content {{
+                font-size: 16px;
+                color: #555;
+            }}
+            .email-footer {{
+                margin-top: 20px;
+                font-size: 14px;
+                color: #777;
+            }}
+        </style>
+    </head>
     <body>
-      <h1 style="color: green;">Requested Information</h1>
-      <p>
-        This email was sent by DisasterConnect Chatbot
-        <br>
-        You have requested the following information:
-        <br>
-        {body}
-      </p>
+        <div class="email-container">
+            <div class="email-header">Requested Information</div>
+            <div class="email-content">
+                This email was sent by DisasterConnect Chatbot.
+                <br><br>
+                You have requested the following information:
+                <br><br>
+                {process_text_message_content(body)}
+            </div>
+            <div class="email-footer">
+                Thank you for using DisasterConnect. Stay safe!
+            </div>
+        </div>
     </body>
     </html>
     """
@@ -222,7 +257,7 @@ tools = [
     {
         "type": "function",
         "function": {
-            "name": "send_confirm_email",
+            "name": "send_email",
             "description": "Send an email as confirmation email to student.",
             "parameters": {
                 "type": "object",
@@ -321,6 +356,40 @@ def process_message_content(content):
     )
     
     return processed_content
+
+def process_text_message_content(response_message_content):
+    # Format the response with proper HTML and spacing
+        formatted_response = response_message_content.replace("\n", "<br>")
+        
+        # Add proper spacing and formatting for sections
+        formatted_response = re.sub(r'###\s*(.*?):', r'<br><br><strong>\1:</strong><br>', formatted_response)
+        
+        # Format numbered lists with proper spacing and indentation
+        formatted_response = re.sub(
+            r'(\d+\.\s+\*\*.*?\*\*)',
+            r'<br>\1',
+            formatted_response
+        )
+        
+        # Format bullet points with proper spacing and indentation
+        formatted_response = re.sub(
+            r'-\s+\*\*([^*]+)\*\*:',
+            r'<br>&emsp;• <strong>\1:</strong>',
+            formatted_response
+        )
+        
+        # Format regular bullet points
+        formatted_response = re.sub(
+            r'-\s+([^<])',
+            r'<br>&emsp;• \1',
+            formatted_response
+        )
+        
+        # Convert markdown bold to HTML
+        formatted_response = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', formatted_response)
+        
+        return formatted_response
+    
 
 def get_addition_resources(file):
     with open(file, 'r', encoding='utf-8') as file:
