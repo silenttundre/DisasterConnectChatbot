@@ -318,77 +318,91 @@ tools = [
 available_functions = {
     "get_current_weather": get_current_weather,
     "send_email": send_email,
-    "get_shelter_info": get_shelter_info,
 }
 #***********************************
 # Helper functions
 #***********************************
 def process_message_content(content):
-    """Process message content to convert various image references to HTML"""
-    # Pattern for explicit image tags
+    """Process message content to convert various image references to HTML."""
+    # Pattern for explicit <image> tags
     pattern1 = r'<image>(.*?)</image>'
     
-    # Pattern for Markdown image syntax
-    pattern2 = r'!\[(.*?)\]\((images/[^)]+)\)'
+    # Pattern for Markdown-style image syntax (i.e. ![alt text](image path))
+    pattern2 = r'!\[([^\]]+)\]\((images/[^)]+)\)'
     
-    # Pattern for parenthetical image references
+    # Pattern for parenthetical image references (i.e. (images/some_image.jpg))
     pattern3 = r'\(images/([^)]+)\)'
-    
-    # Replace explicit image tags
-    processed_content = re.sub(
+
+    # Replace <image> tags with <img> tags
+    content = re.sub(
         pattern1, 
         r'<img src="/images/\1" alt="Resource Image" class="chat-image" />', 
         content
     )
-    
-    # Replace Markdown image syntax
-    processed_content = re.sub(
+
+    # Replace Markdown-style image references with <img> tags
+    content = re.sub(
         pattern2,
         r'<img src="/images/\2" alt="\1" class="chat-image" />',
-        processed_content
+        content
     )
-    
-    # Replace parenthetical image references
-    processed_content = re.sub(
+
+    # Replace parenthetical image references with <img> tags
+    content = re.sub(
         pattern3, 
         r'<img src="/images/\1" alt="Resource Image" class="chat-image" />', 
-        processed_content
+        content
     )
-    
-    return processed_content
+
+    return content
+
 
 def process_text_message_content(response_message_content):
     # Format the response with proper HTML and spacing
-        formatted_response = response_message_content.replace("\n", "<br>")
-        
-        # Add proper spacing and formatting for sections
-        formatted_response = re.sub(r'###\s*(.*?):', r'<br><br><strong>\1:</strong><br>', formatted_response)
-        
-        # Format numbered lists with proper spacing and indentation
-        formatted_response = re.sub(
-            r'(\d+\.\s+\*\*.*?\*\*)',
-            r'<br>\1',
-            formatted_response
-        )
-        
-        # Format bullet points with proper spacing and indentation
-        formatted_response = re.sub(
-            r'-\s+\*\*([^*]+)\*\*:',
-            r'<br>&emsp;• <strong>\1:</strong>',
-            formatted_response
-        )
-        
-        # Format regular bullet points
-        formatted_response = re.sub(
-            r'-\s+([^<])',
-            r'<br>&emsp;• \1',
-            formatted_response
-        )
-        
-        # Convert markdown bold to HTML
-        formatted_response = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', formatted_response)
-        
-        return formatted_response
+    formatted_response = response_message_content.replace("\n", "<br>")
+    
+    # Convert Markdown-style links [text](url) to HTML links
+    formatted_response = re.sub(
+        r'\[([^\]]+)\]\(([^)]+)\)',
+        r'<a href="\2" target="_blank" class="chat-link">\1</a>',
+        formatted_response
+    )
+    
+    # Convert plain URLs to clickable links (for URLs not in Markdown format)
+    formatted_response = re.sub(
+        r'(?<![\(\["])(https?://[^\s<>"]+|www\.[^\s<>"]+)(?![\)\]"])',
+        r'<a href="\1" target="_blank" class="chat-link">\1</a>',
+        formatted_response
+    )
+    
+    # Add proper spacing and formatting for sections
+    formatted_response = re.sub(r'###\s*(.*?):', r'<br><br><strong>\1:</strong><br>', formatted_response)
+    
+    # Format numbered lists with proper spacing and indentation
+    formatted_response = re.sub(
+        r'(\d+\.\s+\*\*.*?\*\*)',
+        r'<br>\1',
+        formatted_response
+    )
+    
+    # Format bullet points with proper spacing and indentation
+    formatted_response = re.sub(
+        r'-\s+\*\*([^*]+)\*\*:',
+        r'<br>&emsp;• <strong>\1:</strong>',
+        formatted_response
+    )
+    
+    # Format regular bullet points
+    formatted_response = re.sub(
+        r'-\s+([^<])',
+        r'<br>&emsp;• \1',
+        formatted_response
+    )
+    
+    # Convert markdown bold to HTML
+    formatted_response = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', formatted_response)
+    
+    return formatted_response
     
 
 def get_addition_resources(file):
@@ -562,35 +576,8 @@ def get_disaster_relief_response(user_input):
                 response_message = chat_completion_request(chatContext, temperature=0, tools=tools, tool_choice="auto")
                 response_message_content = response_message.choices[0].message.content
 
-        # Format the response with proper HTML and spacing
-        formatted_response = response_message_content.replace("\n", "<br>")
-        
-        # Add proper spacing and formatting for sections
-        formatted_response = re.sub(r'###\s*(.*?):', r'<br><br><strong>\1:</strong><br>', formatted_response)
-        
-        # Format numbered lists with proper spacing and indentation
-        formatted_response = re.sub(
-            r'(\d+\.\s+\*\*.*?\*\*)',
-            r'<br>\1',
-            formatted_response
-        )
-        
-        # Format bullet points with proper spacing and indentation
-        formatted_response = re.sub(
-            r'-\s+\*\*([^*]+)\*\*:',
-            r'<br>&emsp;• <strong>\1:</strong>',
-            formatted_response
-        )
-        
-        # Format regular bullet points
-        formatted_response = re.sub(
-            r'-\s+([^<])',
-            r'<br>&emsp;• \1',
-            formatted_response
-        )
-        
         # Convert markdown bold to HTML
-        formatted_response = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', formatted_response)
+        formatted_response = process_text_message_content(response_message_content)
         
         # Process any image tags
         processed_response = process_message_content(formatted_response)

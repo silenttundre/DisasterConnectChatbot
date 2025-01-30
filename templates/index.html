@@ -18,21 +18,26 @@
             height: 100vh; /* Make sure the background covers the full viewport height */
             overflow: hidden; /* Prevent scrollbars */
         }
+
     </style>
 </head>
 
 <body>
     <div class="main-container minimized">
         <!-- Header Section with Logo -->
-        <header class="header" title="InfoNow">
+        <header class="header" title="DisasterConnect">
             <img src="{{ url_for('images', filename='logo.png') }}" alt="DisasterConnect Logo" class="logo" />
             <h1>DisasterConnect Chatbot</h1>
             <button class="minimize-button" title="Minimize Chat">X</button>
         </header>
+        
+        <!-- Chat History Box -->
         <div class="chat-history-box">
             {% for message, sender, timestamp in chat_history %}
             <div class="{{ 'bot-message' if sender == 'bot' else 'user-message' }}">
-                <strong>{{ sender.capitalize() }}:</strong> {% if sender == "bot" %} {{ message|safe }} {% else %} {{ message }} {% endif %}
+                <strong>{{ sender.capitalize() }}:</strong> 
+                <!-- Use the safe filter to allow HTML rendering -->
+                <span class="message-content">{{ message|safe }}</span>
                 <span class="timestamp">{{ timestamp }}</span>
             </div>
             {% endfor %}
@@ -56,12 +61,12 @@
             const mainContainer = document.querySelector(".main-container");
             const logo = document.querySelector(".logo");
             const minimizeButton = document.querySelector(".minimize-button");
-        
+
             // Toggle minimize/maximize state
             const toggleChat = () => {
                 mainContainer.classList.toggle("minimized");
             };
-        
+
             // Add click event listeners for minimize/maximize
             minimizeButton.addEventListener("click", toggleChat);
             logo.addEventListener("click", toggleChat);
@@ -72,27 +77,27 @@
                     toggleChat();
                 }
             });
-        
+
             // Auto-scroll to bottom of chat history
             function scrollToBottom() {
                 var chatHistory = document.querySelector(".chat-history-box");
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             }
-        
+
             // Progress bar animation
             function startProgress() {
                 const progressContainer = document.getElementById("progressContainer");
                 const progressFill = progressContainer.querySelector(".progress-fill");
-                
+
                 // Reset and show progress bar
                 progressContainer.style.display = "block";
                 progressFill.style.width = "0%";
-                
+
                 // Initial jump to show activity
                 setTimeout(() => {
                     progressFill.style.width = "20%";
                 }, 100);
-        
+
                 // Simulate progress
                 let progress = 20;
                 const interval = setInterval(() => {
@@ -102,47 +107,47 @@
                         progressFill.style.width = `${progress}%`;
                     }
                 }, 500);
-                
+
                 return interval;
             }
-        
+
             function completeProgress() {
                 const progressContainer = document.getElementById("progressContainer");
                 const progressFill = progressContainer.querySelector(".progress-fill");
-                
+
                 // Complete the progress bar
                 progressFill.style.width = "100%";
-                
+
                 // Hide after completion
                 setTimeout(() => {
                     progressContainer.style.display = "none";
                     progressFill.style.width = "0%";
                 }, 500);
             }
-        
+
             // Form submission handler
             document.getElementById("chatForm").addEventListener("submit", function(e) {
                 e.preventDefault();
-                
+
                 const input = document.getElementById("user_input");
                 const sendButton = document.getElementById("sendButton");
-                
+
                 // Don't submit if input is empty
                 if (!input.value.trim()) {
                     return;
                 }
-                
+
                 // Disable input and button while processing
                 input.disabled = true;
                 sendButton.disabled = true;
-                
+
                 // Start progress bar
                 const progressInterval = startProgress();
-                
+
                 // Create form data
                 const formData = new FormData();
                 formData.append("user_input", input.value);
-                
+
                 // Submit the form via fetch
                 fetch("/", {
                     method: "POST",
@@ -153,24 +158,24 @@
                     // Create a temporary container to update only chat history
                     const temp = document.createElement("div");
                     temp.innerHTML = html;
-                    
+
                     const newChatHistory = temp.querySelector(".chat-history-box");
                     document.querySelector(".chat-history-box").innerHTML = newChatHistory.innerHTML;
-                    
+
                     // Clear the input
                     input.value = "";
-                    
+
                     // Complete progress bar
                     clearInterval(progressInterval);
                     completeProgress();
-                    
+
                     // Scroll to bottom
                     scrollToBottom();
                 })
                 .catch(error => {
                     console.error("Error:", error);
                     alert("An error occurred while sending your message. Please try again.");
-                    
+
                     // Complete progress bar even on error
                     clearInterval(progressInterval);
                     completeProgress();

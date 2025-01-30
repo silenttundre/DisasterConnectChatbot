@@ -226,12 +226,11 @@ button:hover {
 }
 
 .user-message {
-    background-color: #007bff;
-    color: white;
-    margin-left: auto;
-    /* Align to the right */
-    text-align: right;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    background-color: #2859fa;  /* Lighter blue */
+    color: white;  /* White text color */
+    margin-left: auto;  /* Align to the right */
+    text-align: right;  /* Text alignment to the right */
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);  /* Light shadow for depth */
 }
 
 
@@ -255,7 +254,7 @@ button:hover {
 
 .user-message .timestamp {
     text-align: right;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(234, 233, 238, 0.8);
 }
 
 .bot-message .timestamp {
@@ -375,6 +374,31 @@ button:hover {
     display: block;
 }
 
-/* .hidden {
-    display: none;
-} */
+/* Chat Link Styling */
+.chat-link {
+    color: #007bff;
+    text-decoration: none;
+    word-break: break-word;
+    transition: color 0.2s ease;
+}
+
+.chat-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Adjust link color in user messages */
+.user-message .chat-link {
+    color: #4207e4;
+    text-decoration: underline;
+}
+
+.user-message .chat-link:hover {
+    color: #e6e6e6;
+}
+
+/* Ensure links don't break the layout */
+.bot-message, .user-message {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
