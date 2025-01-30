@@ -19,7 +19,7 @@ if %errorlevel% neq 0 (
 
 REM 5. Install required Python packages
 echo Installing required Python packages...
-pip install flask openai==0.28 python-dotenv tenacity
+pip install flask openai==1.59.1 python-dotenv tenacity sendgrid
 if %errorlevel% neq 0 (
     echo Failed to install required Python packages.
     exit /b 1

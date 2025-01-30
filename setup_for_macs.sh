@@ -19,7 +19,7 @@ fi
 
 # 5. Install required Python packages
 echo "Installing required Python packages..."
-pip install flask openai==0.28 python-dotenv tenacity
+pip install flask openai==1.59.9 python-dotenv tenacity sendgrid
 if [ $? -ne 0 ]; then
     echo "Failed to install required Python packages."
     exit 1
