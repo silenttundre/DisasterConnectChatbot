@@ -354,30 +354,27 @@ button:hover {
 /* Progress Bar Container */
 .progress-container {
     width: 100%;
-    height: 5px;
-    background-color: #e0e0e0;
-    border-radius: 5px;
+    height: 4px;
+    background-color: #f0f0f0;
+    border-radius: 2px;
     margin-top: 10px;
     overflow: hidden;
-    display: none; /* Initially hidden */
 }
 
-.progress-bar {
-    width: 100%;
-    height: 100%;
-    background-color: #007bff;
-    border-radius: 5px;
-    transition: width 0.3s ease;
-}
-
+/* Progress Bar Fill */
 .progress-fill {
-    width: 0%; /* Initial width 0% */
+    width: 0%;
     height: 100%;
-    background-color: #007bff;
-    border-radius: 5px;
-    transition: width 0.3s ease;
+    background: linear-gradient(90deg, #007bff, #00d4ff);
+    border-radius: 2px;
+    transition: width 0.3s ease-in-out;
 }
 
-.hidden {
-    display: none;
+/* Show progress container when active */
+.progress-container.active {
+    display: block;
 }
+
+/* .hidden {
+    display: none;
+} */
