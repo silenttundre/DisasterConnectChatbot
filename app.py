@@ -2,6 +2,7 @@ import json
 import os
 import requests
 import time
+import datetime
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -10,7 +11,13 @@ from openai import OpenAI
 from flask import Flask, render_template, request, send_from_directory
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 import re
+from pydantic import BaseModel, Field
+from typing import Literal
 
+class GetCurrentAirQuality(BaseModel):
+    latitude: float = Field(..., description="The latitude of the location, e.g., 37.7749")
+    longitude: float = Field(..., description="The longitude of the location, e.g., -122.4194")
+    
 # Load environment variables
 load_dotenv()
 
@@ -173,7 +180,7 @@ def get_current_weather(latitude, longitude):
     
 def get_shelter_info(latitude, longitude, radius=50000, limit=10):
     """
-    Fetches real-time shelter information near a given latitude and longitude using the American Red Cross Shelter API.
+    Fetches shelter-related information near a given latitude and longitude using FEMA's Open API data.
 
     Args:
         latitude (float): Latitude of the location.
@@ -182,80 +189,173 @@ def get_shelter_info(latitude, longitude, radius=50000, limit=10):
         limit (int): Maximum number of results to return (default is 10).
 
     Returns:
-        dict: Information about nearby shelters, including location, capacity, and status.
+        dict: Information about nearby shelters, including location, capacity, and disaster type.
     """
     try:
-        # American Red Cross Shelter API endpoint (example URL, replace with actual API endpoint)
-        url = "https://api.redcross.org/shelters"
-        
-        # Query parameters
-        params = {
-            "lat": latitude,
-            "lon": longitude,
-            "radius": radius,
-            "limit": limit
+        # Step 1: Fetch disaster-related data from FEMA's Open API
+        fema_url = "https://www.fema.gov/api/open/v2/DisasterDeclarationsSummaries"
+        fema_params = {
+            "api_key": "YOUR_FEMA_API_KEY",  # Replace with your actual API key
+            "latitude": latitude,
+            "longitude": longitude,
+            "radius": radius
         }
-        
-        # Make the GET request
-        response = requests.get(url, params=params)
-        response.raise_for_status()  # Raise an exception for HTTP errors
-        
-        # Parse the JSON response
-        data = response.json()
-        
-        # Extract relevant information about shelters
+
+        fema_response = requests.get(fema_url, params=fema_params)
+        fema_response.raise_for_status()
+
+        # Parse FEMA response
+        fema_data = fema_response.json()
+
+        # Step 2: Process FEMA disaster-related data
         shelters = []
-        for shelter in data.get("shelters", []):
-            shelters.append({
-                "shelter_id": shelter.get("id"),
-                "name": shelter.get("name"),
-                "address": shelter.get("address"),
-                "city": shelter.get("city"),
-                "state": shelter.get("state"),
-                "postal_code": shelter.get("postal_code"),
-                "latitude": shelter.get("latitude"),
-                "longitude": shelter.get("longitude"),
-                "capacity": shelter.get("capacity"),
-                "current_occupancy": shelter.get("current_occupancy"),
-                "status": shelter.get("status"),  # e.g., "open", "closed", "full"
-            })
-        
+
+        for disaster in fema_data.get("data", []):
+            # Filter for disaster types that generally require shelters
+            disaster_info = {
+                "disaster_id": disaster.get("disasterNumber"),
+                "disaster_name": disaster.get("incidentType"),
+                "disaster_state": disaster.get("state"),
+                "disaster_date": disaster.get("declarationDate"),
+                "incident_begin_date": disaster.get("incidentBeginDate"),
+                "incident_end_date": disaster.get("incidentEndDate"),
+                "shelter_needed": disaster.get("incidentType") in ["Hurricane", "Flood", "Tornado", "Wildfire"],  # Example filter
+                "affected_area": disaster.get("incidentBeginDate")
+            }
+
+            shelters.append(disaster_info)
+
         return {
             "latitude": latitude,
             "longitude": longitude,
             "radius_meters": radius,
-            "shelters": shelters,
+            "shelters": shelters[:limit],  # Limit results to the specified limit
         }
+        
     except requests.RequestException as e:
-        return {"error": f"Failed to fetch shelter data: {str(e)}"}
+        return {"error": f"Failed to fetch shelter or disaster data: {str(e)}"}
     except KeyError:
         return {"error": "Unexpected response format"}
 
+def get_current_airquality(latitude, longitude, date, distance = 25, format = 'application/json'):
+    """
+    Fetches the current air quality for a given latitude and longitude using the AirNow API.
+
+    Args:
+        format(string): application/json, text/csv, application/xml (output format) 
+        latitude (float): Latitude of the location.
+        longitude (float): Longitude of the location.
+        date(string): query date(eg. 2025-1-28)
+        distance(string): query distance radius(eg. 25)
+
+    Returns:
+        application/jason: [{"DateIssue":"2025-01-28","DateForecast":"2025-01-28","ReportingArea":"Yuba City and Marysville",
+        "StateCode":"CA","Latitude":39.1389,"Longitude":-121.6175,"ParameterName":"PM2.5","AQI":77,
+        "Category":{"Number":2,"Name":"Moderate"},
+        "ActionDay":false,"Discussion":""},{"DateIssue":"2025-01-28","DateForecast":"2025-01-29",
+        "ReportingArea":"Yuba City and Marysville","StateCode":"CA","Latitude":39.1389,"Longitude":-121.6175,
+        "ParameterName":"PM2.5","AQI":77,"Category":{"Number":2,"Name":"Moderate"},"ActionDay":false,"Discussion":""}]
+
+        text/csv: "DateIssue","DateForecast","ReportingArea","StateCode","Latitude","Longitude","ParameterName","AQI",
+        "CategoryNumber","CategoryName","ActionDay","Discussion"
+        "2025-01-28","2025-01-28","Yuba City and Marysville","CA","39.1389","-121.6175","PM2.5","77","2","Moderate","false",""
+        "2025-01-28","2025-01-29","Yuba City and Marysville","CA","39.1389","-121.6175","PM2.5","77","2","Moderate","false",""
+
+        application/xml: <ForecastByLatLonList>
+  <ForecastByLatLon>
+    <DateIssue>01/28/2025 12:00:00 AM</DateIssue>
+    <DateForecast>01/28/2025 12:00:00 AM</DateForecast>
+    <ReportingArea>Yuba City and Marysville</ReportingArea>
+    <StateCode>CA</StateCode>
+    <Latitude>39.1389</Latitude>
+    <Longitude>-121.6175</Longitude>
+    <ParameterName>PM2.5</ParameterName>
+    <AQI>77</AQI>
+    <CategoryNumber>2</CategoryNumber>
+    <CategoryName>Moderate</CategoryName>
+    <ActionDay>False</ActionDay>
+    <Discussion></Discussion>
+  </ForecastByLatLon>
+  <ForecastByLatLon>
+    <DateIssue>01/28/2025 12:00:00 AM</DateIssue>
+    <DateForecast>01/29/2025 12:00:00 AM</DateForecast>
+    <ReportingArea>Yuba City and Marysville</ReportingArea>
+    <StateCode>CA</StateCode>
+    <Latitude>39.1389</Latitude>
+    <Longitude>-121.6175</Longitude>
+    <ParameterName>PM2.5</ParameterName>
+    <AQI>77</AQI>
+    <CategoryNumber>2</CategoryNumber>
+    <CategoryName>Moderate</CategoryName>
+    <ActionDay>False</ActionDay>
+    <Discussion></Discussion>
+  </ForecastByLatLon>
+</ForecastByLatLonList>
+    """
+    try:
+        # Open-Meteo API endpoint with required parameters
+        url = f"https://www.airnowapi.org/aq/forecast/latLong/?format={format}&latitude={latitude}&longitude={longitude}&date={date}&distance={distance}&API_KEY=D79713AA-E89D-47F5-9F30-AA857EB839A7"
+
+        # Make the GET request
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+
+        # Parse the JSON response
+        data = response.json()
+        #print(data)
+
+        if data:
+          response_text = {"Reporting Area": data[0]["ReportingArea"] + ", " + data[0]["StateCode"],
+                          "ParameterName": data[0]["ParameterName"],
+                          "Forecasts": []}  # Initialize an empty list for forecasts
+          #print(response_text)
+          for d in data:
+            #print(d)
+            forecast_data = {
+                "DateForecast": d["DateForecast"],
+                "AQI": d["AQI"],
+                "ActionDay": bool(d["ActionDay"]),
+                #"Discussion": d["Discussion"],
+                "CategoryNumber": d["Category"]["Number"],
+                "CategoryName": d["Category"]["Name"]
+            }
+            #print(forecast_data)
+            response_text["Forecasts"].append(forecast_data)  # Append forecast data to the list
+            #print(response_text)
+
+          return response_text
+        else:
+          return {"error": "No data available"}
+    except requests.RequestException as e:
+        return {"error": f"Failed to fetch air quality data: {str(e)}"}
+    except KeyError:
+        return {"error": "Unexpected response format"}
+    
 # Setup the tools and include user defined functions
 tools = [
-    {
-        "type": "function",
-        "function": {
-            "name": "get_current_weather",
-            "description": "Get the current weather using latitude and longitude",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "latitude": {
-                        "type": "number",
-                        "description": "The latitude of the location, e.g., 37.7749",
-                    },
-                    "longitude": {
-                        "type": "number",
-                        "description": "The longitude of the location, e.g., -122.4194",
-                    }
-                },
-                "required": ["latitude", "longitude"],
-                "additionalProperties": False
-            },
-            "strict": True
-        }
-    },
+    # {
+    #     "type": "function",
+    #     "function": {
+    #         "name": "get_current_weather",
+    #         "description": "Get the current weather using latitude and longitude",
+    #         "parameters": {
+    #             "type": "object",
+    #             "properties": {
+    #                 "latitude": {
+    #                     "type": "number",
+    #                     "description": "The latitude of the location, e.g., 37.7749",
+    #                 },
+    #                 "longitude": {
+    #                     "type": "number",
+    #                     "description": "The longitude of the location, e.g., -122.4194",
+    #                 }
+    #             },
+    #             "required": ["latitude", "longitude"],
+    #             "additionalProperties": False
+    #         },
+    #         "strict": True
+    #     }
+    # },
     {
         "type": "function",
         "function": {
@@ -315,11 +415,14 @@ tools = [
             "strict": False
         }
     },
+    openai.pydantic_function_tool(GetCurrentAirQuality),
 ]
 
 available_functions = {
-    "get_current_weather": get_current_weather,
+    "GetCurrentAirQuality": get_current_airquality,
+    #"get_current_weather": get_current_weather,
     "send_email": send_email,
+
 }
 #***********************************
 # Helper functions
@@ -547,6 +650,8 @@ def get_disaster_relief_response(user_input):
         response_message_content = assistant_message.content
         
         tool_calls = assistant_message.tool_calls
+        # Step 1: Get today's date dynamically
+        today_date = datetime.date.today().strftime("%Y-%m-%d")
         
         if tool_calls:
             # Step 3: call the function.
@@ -558,6 +663,8 @@ def get_disaster_relief_response(user_input):
                 print("GPT to call! function: ", function_name)
                 function_to_call = available_functions[function_name]
                 function_args = json.loads(tool_call.function.arguments)
+                # Step 2: Add today's date to the function arguments (if not already present)
+                function_args['date'] = today_date
 
                 function_response = function_to_call(**function_args)  # argument unpacking
 
