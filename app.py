@@ -499,7 +499,7 @@ def get_initial_greeting():
         <br>
         &emsp;4. A Relief Organization
         <br><br>
-        Please respond with the number that corresponds to your role.
+        Please respond with the number that corresponds to your role, or feel free to ask any question directly.
         """
         
         full_greeting = greeting + user_type_prompt
@@ -526,11 +526,11 @@ def get_initial_greeting():
         <br>
         &emsp;4. A Relief Organization
         <br><br>
-        Please respond with the number that corresponds to your role.
+        Please respond with the number that corresponds to your role, or feel free to ask any question directly.
         """
         chat_history.append((error_message, "bot", timestamp))
         return error_message
-    
+        
 def get_disaster_relief_response(user_input):
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
     
@@ -710,7 +710,7 @@ def index():
         user_input = request.form["user_input"]
         
         # Check if this is a user type selection
-        if chat_history and "tell me your role" in chat_history[-1][0].lower():
+        if chat_history and "tell me your role" in chat_history[-1][0].lower() and user_input.strip() in ['1', '2', '3', '4']:
             response = process_user_type_selection(user_input)
         else:
             # Regular message processing
