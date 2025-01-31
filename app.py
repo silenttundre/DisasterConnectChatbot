@@ -21,6 +21,8 @@ SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 # OpenAI model - gpt-4o-mini is the cheapest
 GPT_MODEL = "gpt-4o-mini"
 
+CHATBOT_NAME = "DisasterConnect"
+
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 # Flask app setup
@@ -90,14 +92,14 @@ def send_email(to, subject, body):
         <div class="email-container">
             <div class="email-header">Requested Information</div>
             <div class="email-content">
-                This email was sent by DisasterConnect Chatbot.
+                This email was sent by {CHATBOT_NAME} Chatbot.
                 <br><br>
                 You have requested the following information:
                 <br><br>
                 {process_text_message_content(body)}
             </div>
             <div class="email-footer">
-                Thank you for using DisasterConnect. Stay safe!
+                Thank you for using {CHATBOT_NAME}. Stay safe!
             </div>
         </div>
     </body>
@@ -109,7 +111,7 @@ def send_email(to, subject, body):
         message = Mail(
             from_email=SENDER,
             to_emails=to,
-            subject=subject,
+            subject=CHATBOT_NAME + ": " + subject,
             html_content=BODY_HTML
         )
         sg = SendGridAPIClient(SENDGRID_API_KEY)
@@ -512,7 +514,7 @@ def get_initial_greeting():
     except Exception as e:
         print(f"Error getting initial greeting: {e}")
         error_message = """
-        Welcome to DisasterConnect. We're here to help during this challenging time.
+        Welcome to {CHATBOT_NAME}. We're here to help during this challenging time.
         <br><br>
         To best assist you, could you please tell me your role in this disaster situation?
         <br><br>
