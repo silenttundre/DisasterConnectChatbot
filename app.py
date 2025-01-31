@@ -463,9 +463,9 @@ def process_message_content(content):
 
 
 def process_text_message_content(response_message_content):
-    # Format the response with proper HTML and spacing
-    formatted_response = response_message_content.replace("\n", "<br>")
-    
+    # First, remove leading and trailing whitespace and replace newlines with a space to prevent extra line breaks
+    formatted_response = response_message_content.strip().replace("\n", " ")
+
     # Convert Markdown-style links [text](url) to HTML links
     formatted_response = re.sub(
         r'\[([^\]]+)\]\(([^)]+)\)',
@@ -479,36 +479,42 @@ def process_text_message_content(response_message_content):
         r'<a href="\1" target="_blank" class="chat-link">\1</a>',
         formatted_response
     )
+
+    # Replace headings with bold and add line breaks
+    formatted_response = re.sub(r'###\s*(.*?):', r'<br><strong>\1:</strong>', formatted_response)
     
-    # Add proper spacing and formatting for sections
-    formatted_response = re.sub(r'###\s*(.*?):', r'<br><br><strong>\1:</strong><br>', formatted_response)
-    
-    # Format numbered lists with proper spacing and indentation
+    # Format numbered lists without extra line breaks
     formatted_response = re.sub(
-        r'(\d+\.\s+\*\*.*?\*\*)',
+        r'(\d+\.\s*\*\*[^*]+\*\*)',
         r'<br>\1',
         formatted_response
     )
-    
-    # Format bullet points with proper spacing and indentation
+
+    # Format bullet points with proper spacing, avoiding extra <br>
     formatted_response = re.sub(
-        r'-\s+\*\*([^*]+)\*\*:',
-        r'<br>&emsp;• <strong>\1:</strong>',
+        r'-\s+\*\*([^*]+)\*\*:?',
+        r'<br>&emsp;• <strong>\1</strong>:',
         formatted_response
     )
-    
-    # Format regular bullet points
+
+    # Regular bullet points (without extra line breaks)
     formatted_response = re.sub(
         r'-\s+([^<])',
         r'<br>&emsp;• \1',
         formatted_response
     )
     
-    # Convert markdown bold to HTML
+    # Convert markdown bold to HTML <strong> tags
     formatted_response = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', formatted_response)
-    
+
+    # Now remove all consecutive <br> tags, leaving only one line break
+    formatted_response = re.sub(r'<br>\s*<br>', r'<br>', formatted_response)
+
+    # Finally, ensure no excessive spaces around <br> tags
+    formatted_response = re.sub(r'\s*<br>\s*', r'<br>', formatted_response)
+
     return formatted_response
-    
+
 
 def get_addition_resources(file):
     with open(file, 'r', encoding='utf-8') as file:
