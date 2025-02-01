@@ -178,34 +178,28 @@ def get_current_weather(latitude, longitude):
     except KeyError:
         return {"error": "Unexpected response format"}
     
-def get_shelter_info(latitude, longitude, radius=50000, limit=10):
+def get_shelter_info(zipcode):
     """
     Fetches shelter-related information near a given latitude and longitude using FEMA's Open API data.
 
     Args:
-        latitude (float): Latitude of the location.
-        longitude (float): Longitude of the location.
-        radius (int): Search radius in meters (default is 50000 meters or 50 km).
-        limit (int): Maximum number of results to return (default is 10).
+        zipcode (int): Zipcode of the location.
 
     Returns:
         dict: Information about nearby shelters, including location, capacity, and disaster type.
     """
     try:
-        # Step 1: Fetch disaster-related data from FEMA's Open API
-        fema_url = "https://www.fema.gov/api/open/v2/DisasterDeclarationsSummaries"
-        fema_params = {
-            "api_key": "YOUR_FEMA_API_KEY",  # Replace with your actual API key
-            "latitude": latitude,
-            "longitude": longitude,
-            "radius": radius
+        # Step 1: Fetch disaster-related data from Red Cross Open API
+        arc_url = "https://resources.redcross.org/search_results/{zipcode}?widget=redcrossdisasterresources&ref=DCSclient"
+        arc_params = {
+            "zipcode": zipcode,
         }
 
-        fema_response = requests.get(fema_url, params=fema_params)
-        fema_response.raise_for_status()
+        arc_params_response = requests.get(arc_url, params=arc_params)
+        arc_params_response.raise_for_status()
 
         # Parse FEMA response
-        fema_data = fema_response.json()
+        fema_data = arc_params_response.json()
 
         # Step 2: Process FEMA disaster-related data
         shelters = []
@@ -226,10 +220,7 @@ def get_shelter_info(latitude, longitude, radius=50000, limit=10):
             shelters.append(disaster_info)
 
         return {
-            "latitude": latitude,
-            "longitude": longitude,
-            "radius_meters": radius,
-            "shelters": shelters[:limit],  # Limit results to the specified limit
+            "zipcode": zipcode,
         }
         
     except requests.RequestException as e:
@@ -384,37 +375,25 @@ tools = [
             "strict": True
         }
     }, 
-    {
-        "type": "function",
-        "function": {
-            "name": "get_shelter_info",
-            "description": "Get real-time information about shelters near a given latitude and longitude",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "latitude": {
-                        "type": "number",
-                        "description": "The latitude of the location, e.g., 37.7749",
-                    },
-                    "longitude": {
-                        "type": "number",
-                        "description": "The longitude of the location, e.g., -122.4194",
-                    },
-                    "radius": {
-                        "type": "integer",
-                        "description": "The search radius in meters, e.g., 50000",
-                    },
-                    "limit": {
-                        "type": "integer",
-                        "description": "The maximum number of results to return, e.g., 10",
-                    }
-                },
-                "required": ["latitude", "longitude"],  # Only latitude and longitude are required
-                "additionalProperties": False
-            },
-            "strict": False
-        }
-    },
+    # {
+    #     "type": "function",
+    #     "function": {
+    #         "name": "get_shelter_info",
+    #         "description": "Get real-time information about shelters near a given latitude and longitude",
+    #         "parameters": {
+    #             "type": "object",
+    #             "properties": {
+    #                 "postal": {
+    #                     "type": "number",
+    #                     "description": "The zipcode of the location, e.g., 95148",
+    #                 },
+    #             },
+    #             "required": ["postal"],  # Only postal is required
+    #             "additionalProperties": False
+    #         },
+    #         "strict": False
+    #     }
+    # },
     openai.pydantic_function_tool(GetCurrentAirQuality),
 ]
 
@@ -669,8 +648,10 @@ def get_disaster_relief_response(user_input):
                 print("GPT to call! function: ", function_name)
                 function_to_call = available_functions[function_name]
                 function_args = json.loads(tool_call.function.arguments)
-                # Step 2: Add today's date to the function arguments (if not already present)
-                function_args['date'] = today_date
+
+                # Step 2: Add today's date to the function arguments (if not already present) only for GetCurrentAirQuality
+                if function_name == 'GetCurrentAirQuality':
+                    function_args['date'] = today_date
 
                 function_response = function_to_call(**function_args)  # argument unpacking
 
