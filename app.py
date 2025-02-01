@@ -324,29 +324,29 @@ def get_current_airquality(latitude, longitude, date, distance = 25, format = 'a
     
 # Setup the tools and include user defined functions
 tools = [
-    # {
-    #     "type": "function",
-    #     "function": {
-    #         "name": "get_current_weather",
-    #         "description": "Get the current weather using latitude and longitude",
-    #         "parameters": {
-    #             "type": "object",
-    #             "properties": {
-    #                 "latitude": {
-    #                     "type": "number",
-    #                     "description": "The latitude of the location, e.g., 37.7749",
-    #                 },
-    #                 "longitude": {
-    #                     "type": "number",
-    #                     "description": "The longitude of the location, e.g., -122.4194",
-    #                 }
-    #             },
-    #             "required": ["latitude", "longitude"],
-    #             "additionalProperties": False
-    #         },
-    #         "strict": True
-    #     }
-    # },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather",
+            "description": "Get the current weather using latitude and longitude",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "latitude": {
+                        "type": "number",
+                        "description": "The latitude of the location, e.g., 37.7749",
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "description": "The longitude of the location, e.g., -122.4194",
+                    }
+                },
+                "required": ["latitude", "longitude"],
+                "additionalProperties": False
+            },
+            "strict": True
+        }
+    },
     {
         "type": "function",
         "function": {
@@ -399,7 +399,7 @@ tools = [
 
 available_functions = {
     "GetCurrentAirQuality": get_current_airquality,
-    #"get_current_weather": get_current_weather,
+    "get_current_weather": get_current_weather,
     "send_email": send_email,
 
 }
@@ -742,34 +742,7 @@ def process_user_type_selection(user_input):
         }], 0)
 
         # Apply the same formatting logic as in get_disaster_relief_response
-        formatted_response = user_type_guidance.replace("\n", "<br>")
-        
-        # Add proper spacing and formatting for sections
-        formatted_response = re.sub(r'###\s*(.*?):', r'<br><br><strong>\1:</strong><br>', formatted_response)
-        
-        # Format numbered lists with proper spacing and indentation
-        formatted_response = re.sub(
-            r'(\d+\.\s+\*\*.*?\*\*)',
-            r'<br>\1',
-            formatted_response
-        )
-        
-        # Format bullet points with proper spacing and indentation
-        formatted_response = re.sub(
-            r'-\s+\*\*([^*]+)\*\*:',
-            r'<br>&emsp;• <strong>\1:</strong>',
-            formatted_response
-        )
-        
-        # Format regular bullet points
-        formatted_response = re.sub(
-            r'-\s+([^<])',
-            r'<br>&emsp;• \1',
-            formatted_response
-        )
-        
-        # Convert markdown bold to HTML
-        formatted_response = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', formatted_response)
+        formatted_response = process_text_message_content(user_type_guidance)
         
         # Process any image tags
         processed_response = process_message_content(formatted_response)

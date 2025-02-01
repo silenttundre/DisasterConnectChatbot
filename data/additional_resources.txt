@@ -1,4 +1,4 @@
-[FAQ:]
+[Watch Duty FAQ:]
 Why aren't there new updates on an incident?
 We release any and all vetted intelligence within minutes after we receive it.  This information comes from either incident command over the radio scanner or official posts from sheriffs, fire departments, USFS, etc.  There are many times, especially on an extended incident, where information goes dark and radio chatter becomes quiet.
 We understand this can be frustrating because it’s frustrating for us too.  We have over a hundred volunteers spending their days constantly listening, communicating directly with officials, and still coming up blank. We would like you to join us in urging our local officials to release more information to help keep everyone informed and calm our nerves during these incredibly difficult times.
@@ -303,3 +303,17 @@ Your photo will now be reviewed by our reporters, who will decide whether to pos
 Can I use Watch Duty if I don't have a smart phone?
 You can use access the Watch Duty application from any web browser at app.watchduty.org.
 NOTE: You will not receive notifications for new fires or updates in your web browser. All the fire information is the same as in the app.
+
+[Red Cross Information]
+Use the zipcode from the user input and then replace {zipcode} with user input:
+https://resources.redcross.org/search_results/{zipcode}
+
+
+[Shelters]
+[Pacific Palisades, CA]
+Westwood Recreation Center – 1350 Sepulveda Blvd., Los Angeles, CA 90025
+Pasadena Civic Auditorium – 300 East Green Street, Pasadena, CA 91101
+
+[Altadena, CA]
+Altadena Disaster Recovery Center - 540 W Woodbury Rd., Altadena, CA 91001
+Hours of Operation: 9 am - 8 pm, 7 days a week
