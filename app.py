@@ -13,6 +13,8 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 import re
 from pydantic import BaseModel, Field
 from typing import Literal
+from pinecone.grpc import PineconeGRPC as Pinecone
+import os
 
 class GetCurrentAirQuality(BaseModel):
     latitude: float = Field(..., description="The latitude of the location, e.g., 37.7749")
@@ -27,8 +29,13 @@ load_dotenv()
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 # OpenAI model - gpt-4o-mini is the cheapest
 GPT_MODEL = "gpt-4o-mini"
-
 CHATBOT_NAME = "DisasterConnect"
+
+# Initialize Pinecone
+pinecone_api_key = os.getenv("PINECONE_API_KEY")
+pc = Pinecone(api_key=pinecone_api_key)
+index_name = 'cstugpt-dc'  # Your Pinecone index name
+embed_model = "text-embedding-3-small"  # Embedding model
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
@@ -501,7 +508,7 @@ def get_addition_resources(file):
             file_content = file.read()
     return file_content
 
-additional_resources = get_addition_resources('data/additional_resources.txt')
+#additional_resources = get_addition_resources('data/additional_resources.txt')
 survivor_resources = get_addition_resources('data/user_type_resources/survivor.txt')
 provider_resources = get_addition_resources('data/user_type_resources/provider.txt')
 public_resources = get_addition_resources('data/user_type_resources/concerned_public.txt')
@@ -521,7 +528,6 @@ Procedure:
 1. Tailor responses based on the selected user type
 2. Provide specific, relevant information and resources
 3. Maintain a supportive and informative tone
-{additional_resources}
 
 {survivor_resources}
 
@@ -533,6 +539,38 @@ Procedure:
 """
     },
 ]
+
+# Pinecone Functions
+def query_pinecone(user_input, namespace='dc', top_k=3):
+    """
+    Query Pinecone vector database for relevant information.
+    
+    Args:
+        user_input (str): The user's query.
+        namespace (str): The namespace in Pinecone.
+        top_k (int): Number of results to return.
+    
+    Returns:
+        list: List of relevant text chunks from Pinecone.
+    """
+    # Generate embedding for the user input
+    res = client.embeddings.create(input=user_input, model=embed_model)
+    embed = res.data[0].embedding
+    
+    # Query Pinecone
+    index = pc.Index(index_name)
+    query_response = index.query(
+        vector=embed,
+        top_k=top_k,
+        include_metadata=True,
+        namespace=namespace
+    )
+    
+    # Extract relevant text chunks
+    relevant_chunks = [match.metadata['text'] for match in query_response.matches]
+    return relevant_chunks
+
+
 
 # Store conversation history (global variable for simplicity)
 chat_history = []
@@ -629,53 +667,46 @@ def get_disaster_relief_response(user_input):
     chatContext.append({'role': 'user', 'content': user_input})
 
     try:
-        # Get bot response
+        # Step 1: Query Pinecone for relevant information
+        relevant_chunks = query_pinecone(user_input)
+        pinecone_context = "\n\nAdditional Information:\n" + "\n".join(relevant_chunks)
+        
+        # Step 2: Add Pinecone context to the chat context
+        chatContext.append({'role': 'system', 'content': pinecone_context})
+        
+        # Step 3: Get bot response
         response_message = chat_completion_request(chatContext, temperature=0, tools=tools, tool_choice="auto")
         assistant_message = response_message.choices[0].message
         response_message_content = assistant_message.content
         
         tool_calls = assistant_message.tool_calls
-        # Step 1: Get today's date dynamically
-        today_date = datetime.date.today().strftime("%Y-%m-%d")
         
         if tool_calls:
-            # Step 3: call the function.
-            chatContext.append(assistant_message)  # extend conversation with assistant's reply
-
-            # Step 4: send the info for each function call and function response to the model
+            # Handle tool calls (existing logic)
+            chatContext.append(assistant_message)
             for tool_call in tool_calls:
                 function_name = tool_call.function.name
-                print("GPT to call! function: ", function_name)
                 function_to_call = available_functions[function_name]
                 function_args = json.loads(tool_call.function.arguments)
-
-                # Step 2: Add today's date to the function arguments (if not already present) only for GetCurrentAirQuality
+                
                 if function_name == 'GetCurrentAirQuality':
-                    function_args['date'] = today_date
-
-                function_response = function_to_call(**function_args)  # argument unpacking
-
-                email_status = function_response
-
-                print(f"ChatBot: Oh, just found the email sending status is {email_status}")
-
-                # Convert the function_response (dictionary) to a string
+                    function_args['date'] = datetime.date.today().strftime("%Y-%m-%d")
+                
+                function_response = function_to_call(**function_args)
                 function_response_str = json.dumps(function_response)
-
+                
                 chatContext.append(
                     {
                         "role": "tool",
                         "tool_call_id": tool_call.id,
-                        "content": function_response_str,  # Use the stringified response
+                        "content": function_response_str,
                     }
                 )
                 response_message = chat_completion_request(chatContext, temperature=0, tools=tools, tool_choice="auto")
                 response_message_content = response_message.choices[0].message.content
 
-        # Convert markdown bold to HTML
+        # Step 4: Format and return the response
         formatted_response = process_text_message_content(response_message_content)
-        
-        # Process any image tags
         processed_response = process_message_content(formatted_response)
         
         chatContext.append({'role': 'assistant', 'content': f"{response_message_content}"})
@@ -686,7 +717,7 @@ def get_disaster_relief_response(user_input):
     except Exception as e:
         print(f"Error processing response: {e}")
         return f"I apologize, but I encountered an error while processing your request. Please try again."
-      
+         
     
 def process_user_type_selection(user_input):
     """Process user type selection and generate appropriate response"""
