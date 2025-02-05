@@ -447,58 +447,53 @@ def process_message_content(content):
 
     return content
 
-
 def process_text_message_content(response_message_content):
-    # First, remove leading and trailing whitespace and replace newlines with a space to prevent extra line breaks
-    formatted_response = response_message_content.strip().replace("\n", " ")
+    # Step 1: Check if the message contains any links
+    print(f"Formatted Response Before Processing Links: {response_message_content}")
+    contains_link = bool(re.search(r'https?://[^\s<>"]+|www\.[^\s<>"]+', response_message_content))
 
-    # Convert Markdown-style links [text](url) to HTML links
-    formatted_response = re.sub(
-        r'\[([^\]]+)\]\(([^)]+)\)',
-        r'<a href="\2" target="_blank" class="chat-link">\1</a>',
-        formatted_response
-    )
+    # Step 2: If links are found, process them first
+    if contains_link:
+        # Step 1: Convert Markdown-style links [text](url) to <a> tags
+        formatted_response = re.sub(
+            r'\[([^\]]+)\]\((https?://[^\)]+|www\.[^\)]+)\)',  # Match Markdown links
+            r'<a href="\2" target="_blank" class="chat-link">\1</a>',  # Convert to <a> tag
+            response_message_content
+        )
+        
+        # Step 2: Convert plain URLs (http://, https://, or www.) to clickable <a> tags
+        # This regex avoids replacing URLs already inside <a> tags
+        formatted_response = re.sub(
+            r'(?<!["\'])((https?://[^\s<>"]+|www\.[^\s<>"]+))(?!["\'])',  # Match plain URLs
+            r'<a href="\1" target="_blank" class="chat-link">\1</a>',  # Convert to <a> tag
+            formatted_response
+        )
+        
+        # Step 3: Clean up <br> tags, ensuring no excessive spaces around them
+        formatted_response = re.sub(r'\s*<br>\s*', r'<br>', formatted_response)
+    else:
+        
+        # Add <br> before each bullet point to make sure they show up on new lines
+        formatted_response = re.sub(
+            r'(\- [^\n]+)',  # Match bullet points (starting with "- ")
+            r'\1',  # Keep the bullet point format, no <br> added before
+            response_message_content
+        )
+        
+        # Replace regular newlines with <br> to ensure each paragraph is on a new line
+        formatted_response = re.sub(
+            r'([^\n]+)\n',  # Match non-empty lines of text followed by a newline
+            r'\1<br>',  # Add a <br> at the end of each line
+            formatted_response
+        )
+        
+        # Remove extra <br> from consecutive newlines or trailing ones
+        formatted_response = re.sub(r'(<br>)+', r'<br>', formatted_response)  # Clean up consecutive <br>
+        formatted_response = re.sub(r'<br>$', '', formatted_response)  # Remove any trailing <br>
+
+
+    print(f"Formatted Response After Processing Links: {formatted_response}")
     
-    # Convert plain URLs to clickable links (for URLs not in Markdown format)
-    formatted_response = re.sub(
-        r'(?<![\(\["])(https?://[^\s<>"]+|www\.[^\s<>"]+)(?![\)\]"])',
-        r'<a href="\1" target="_blank" class="chat-link">\1</a>',
-        formatted_response
-    )
-
-    # Replace headings with bold and add line breaks
-    formatted_response = re.sub(r'###\s*(.*?):', r'<br><strong>\1:</strong>', formatted_response)
-    
-    # Format numbered lists without extra line breaks
-    formatted_response = re.sub(
-        r'(\d+\.\s*\*\*[^*]+\*\*)',
-        r'<br>\1',
-        formatted_response
-    )
-
-    # Format bullet points with proper spacing, avoiding extra <br>
-    formatted_response = re.sub(
-        r'-\s+\*\*([^*]+)\*\*:?',
-        r'<br>&emsp;• <strong>\1</strong>:',
-        formatted_response
-    )
-
-    # Regular bullet points (without extra line breaks)
-    formatted_response = re.sub(
-        r'-\s+([^<])',
-        r'<br>&emsp;• \1',
-        formatted_response
-    )
-    
-    # Convert markdown bold to HTML <strong> tags
-    formatted_response = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', formatted_response)
-
-    # Now remove all consecutive <br> tags, leaving only one line break
-    formatted_response = re.sub(r'<br>\s*<br>', r'<br>', formatted_response)
-
-    # Finally, ensure no excessive spaces around <br> tags
-    formatted_response = re.sub(r'\s*<br>\s*', r'<br>', formatted_response)
-
     return formatted_response
 
 
