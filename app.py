@@ -382,25 +382,6 @@ tools = [
             "strict": True
         }
     }, 
-    # {
-    #     "type": "function",
-    #     "function": {
-    #         "name": "get_shelter_info",
-    #         "description": "Get real-time information about shelters near a given latitude and longitude",
-    #         "parameters": {
-    #             "type": "object",
-    #             "properties": {
-    #                 "postal": {
-    #                     "type": "number",
-    #                     "description": "The zipcode of the location, e.g., 95148",
-    #                 },
-    #             },
-    #             "required": ["postal"],  # Only postal is required
-    #             "additionalProperties": False
-    #         },
-    #         "strict": False
-    #     }
-    # },
     openai.pydantic_function_tool(GetCurrentAirQuality),
 ]
 
@@ -447,21 +428,30 @@ def process_message_content(content):
 
     return content
 
+import re
+
 def process_text_message_content(response_message_content):
     # Step 1: Check if the message contains any links
     print(f"Formatted Response Before Processing Links: {response_message_content}")
     contains_link = bool(re.search(r'https?://[^\s<>"]+|www\.[^\s<>"]+', response_message_content))
 
+    # Step 1.1: Convert **bold** text to <b> tags (before link processing)
+    formatted_response = re.sub(
+        r'\*\*([^\*]+)\*\*',  # Match text between **
+        r'<b>\1</b>',  # Replace with <b>text</b>
+        response_message_content
+    )
+
     # Step 2: If links are found, process them first
     if contains_link:
-        # Step 1: Convert Markdown-style links [text](url) to <a> tags
+        # Step 2.1: Convert Markdown-style links [text](url) to <a> tags
         formatted_response = re.sub(
             r'\[([^\]]+)\]\((https?://[^\)]+|www\.[^\)]+)\)',  # Match Markdown links
             r'<a href="\2" target="_blank" class="chat-link">\1</a>',  # Convert to <a> tag
-            response_message_content
+            formatted_response
         )
         
-        # Step 2: Convert plain URLs (http://, https://, or www.) to clickable <a> tags
+        # Step 2.2: Convert plain URLs (http://, https://, or www.) to clickable <a> tags
         # This regex avoids replacing URLs already inside <a> tags
         formatted_response = re.sub(
             r'(?<!["\'])((https?://[^\s<>"]+|www\.[^\s<>"]+))(?!["\'])',  # Match plain URLs
@@ -469,7 +459,7 @@ def process_text_message_content(response_message_content):
             formatted_response
         )
         
-        # Step 3: Clean up <br> tags, ensuring no excessive spaces around them
+        # Step 2.3: Clean up <br> tags, ensuring no excessive spaces around them
         formatted_response = re.sub(r'\s*<br>\s*', r'<br>', formatted_response)
     else:
         
@@ -477,7 +467,7 @@ def process_text_message_content(response_message_content):
         formatted_response = re.sub(
             r'(\- [^\n]+)',  # Match bullet points (starting with "- ")
             r'\1',  # Keep the bullet point format, no <br> added before
-            response_message_content
+            formatted_response
         )
         
         # Replace regular newlines with <br> to ensure each paragraph is on a new line
@@ -491,10 +481,10 @@ def process_text_message_content(response_message_content):
         formatted_response = re.sub(r'(<br>)+', r'<br>', formatted_response)  # Clean up consecutive <br>
         formatted_response = re.sub(r'<br>$', '', formatted_response)  # Remove any trailing <br>
 
-
-    print(f"Formatted Response After Processing Links: {formatted_response}")
+    print(f"Formatted Response After Processing Links and Bold: {formatted_response}")
     
     return formatted_response
+
 
 
 def get_addition_resources(file):
@@ -520,9 +510,22 @@ User Types:
 4. Relief Organizer: Offer coordination resources, emergency contact information, and strategic support
 
 Procedure:
-1. Tailor responses based on the selected user type
-2. Provide specific, relevant information and resources
-3. Maintain a supportive and informative tone
+As the designated virtual assistant for Disasterconnect, your role is to provide accurate and supportive responses to users, including survivors, caregivers, providers, donors, 
+concerned public members, and relief organizations. Your responses should be grounded in the relevant resources and information available within the specified context.
+
+Do not provide the shelter locations unless we know where the user is located.  So, keep the information general unless the
+user asks for shelters and then we ask the user for the location so we can look it up.
+
+When addressing inquiries related to disaster assistance or support, aim to provide clear, step-by-step guidance where applicable. If the information needed is not 
+present in the available resources or if the query goes beyond the scope of the chatbot’s capabilities, respond with: "I'm not certain, as the knowledge base doesn't 
+contain the necessary information." In such cases, encourage users to seek assistance from relevant organizations or professionals who can provide further support.
+
+If a user is facing an emergency, always remind them that calling 911 is the best course of action for immediate help.
+
+We cannot provide assistance physically or perform any actions for the users.  We can only direct them to pertenant information
+ONLY if we have that specific information.  Do not randomly make assumptions.
+
+Your primary goal is to assist and empower users by delivering reliable, contextually relevant information that facilitates their understanding and access to resources related to disaster relief.
 
 {survivor_resources}
 
@@ -764,7 +767,7 @@ def process_user_type_selection(user_input):
             - Relief Organizations: Provide coordination resources and strategic support
             """
         }, {
-            'role': 'user', 'content': f'Generate a detailed, supportive initial guidance for a {user_type} during a disaster relief effort.'
+            'role': 'user', 'content': f'First, state the selected user type. Generate a detailed, supportive initial guidance for a {user_type} during a disaster relief effort.'
         }], 0)
 
         # Apply the same formatting logic as in get_disaster_relief_response
