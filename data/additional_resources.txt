@@ -11,11 +11,10 @@ PR - Prairie
 CS - Cascade
 NW - Newberry
 CR - Crescent
-<image>coidc-map.jpg</image>
 
 What are Silent Incidents?
 Silent incidents are fires that we are monitoring but are not considered a threat to the entire community at this time. They are displayed on Watch Duty as a small bell with a line through it, indicating it is silent and we are currently monitoring.  
-<image>silent_incident_bell.jpg</image>
+
 If this incident becomes a threat to the larger community we will upgrade this incident and push notifications will be sent. 
  
 Opt-in to receive notifications for silent incidents

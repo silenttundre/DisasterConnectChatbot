@@ -400,7 +400,7 @@ def process_message_content(content):
     pattern1 = r'<image>(.*?)</image>'
     
     # Pattern for Markdown-style image syntax (i.e. ![alt text](image path))
-    pattern2 = r'!\[([^\]]+)\]\((images/[^)]+)\)'
+    pattern2 = r'!\[([^\]]*)\]\((images/[^)]+)\)'
     
     # Pattern for parenthetical image references (i.e. (images/some_image.jpg))
     pattern3 = r'\(images/([^)]+)\)'
@@ -415,7 +415,7 @@ def process_message_content(content):
     # Replace Markdown-style image references with <img> tags
     content = re.sub(
         pattern2,
-        r'<img src="/images/\2" alt="\1" class="chat-image" />',
+        lambda m: f'<img src="/{m.group(2)}" alt="{m.group(1)}" class="chat-image" />',
         content
     )
 
@@ -427,6 +427,40 @@ def process_message_content(content):
     )
 
     return content
+
+# def process_message_content(content):
+#     """Process message content to convert various image references to HTML."""
+#     # Pattern for explicit <image> tags
+#     pattern1 = r'<image>(.*?)</image>'
+    
+#     # Pattern for Markdown-style image syntax (i.e. ![alt text](image path))
+#     pattern2 = r'!\[([^\]]+)\]\((images/[^)]+)\)'
+    
+#     # Pattern for parenthetical image references (i.e. (images/some_image.jpg))
+#     pattern3 = r'\(images/([^)]+)\)'
+
+#     # Replace <image> tags with <img> tags
+#     content = re.sub(
+#         pattern1, 
+#         r'<img src="/images/\1" alt="Resource Image" class="chat-image" />', 
+#         content
+#     )
+
+#     # Replace Markdown-style image references with <img> tags
+#     content = re.sub(
+#         pattern2,
+#         r'<img src="/images/\2" alt="\1" class="chat-image" />',
+#         content
+#     )
+
+#     # Replace parenthetical image references with <img> tags
+#     content = re.sub(
+#         pattern3, 
+#         r'<img src="/images/\1" alt="Resource Image" class="chat-image" />', 
+#         content
+#     )
+
+#     return content
 
 import re
 
@@ -494,6 +528,7 @@ def get_addition_resources(file):
     return file_content
 
 #additional_resources = get_addition_resources('data/additional_resources.txt')
+additional_images = get_addition_resources('data/additional_images.txt')
 survivor_resources = get_addition_resources('data/user_type_resources/survivor.txt')
 provider_resources = get_addition_resources('data/user_type_resources/provider.txt')
 public_resources = get_addition_resources('data/user_type_resources/concerned_public.txt')
@@ -529,6 +564,8 @@ We cannot provide assistance physically or perform any actions for the users.  W
 ONLY if we have that specific information.  Do not randomly make assumptions.
 
 Your primary goal is to assist and empower users by delivering reliable, contextually relevant information that facilitates their understanding and access to resources related to disaster relief.
+
+{additional_images}
 
 {survivor_resources}
 
