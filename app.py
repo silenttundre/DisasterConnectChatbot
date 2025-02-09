@@ -451,13 +451,13 @@ def process_text_message_content(response_message_content):
             formatted_response
         )
         
-        # Step 2.2: Convert plain URLs (http://, https://, or www.) to clickable <a> tags
-        # This regex avoids replacing URLs already inside <a> tags
-        formatted_response = re.sub(
-            r'(?<!["\'])((https?://[^\s<>"]+|www\.[^\s<>"]+))(?!["\'])',  # Match plain URLs
-            r'<a href="\1" target="_blank" class="chat-link">\1</a>',  # Convert to <a> tag
-            formatted_response
-        )
+        # # Step 2.2: Convert plain URLs (http://, https://, or www.) to clickable <a> tags
+        # # This regex avoids replacing URLs already inside <a> tags
+        # formatted_response = re.sub(
+        #     r'(?<!["\'])((https?://[^\s<>"]+|www\.[^\s<>"]+))(?!["\'])',  # Match plain URLs
+        #     r'<a href="\1" target="_blank" class="chat-link">\1</a>',  # Convert to <a> tag
+        #     formatted_response
+        # )
         
         # Step 2.3: Clean up <br> tags, ensuring no excessive spaces around them
         formatted_response = re.sub(r'\s*<br>\s*', r'<br>', formatted_response)
