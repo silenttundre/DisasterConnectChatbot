@@ -15,9 +15,10 @@ Support Services:
 - Legal Aid: Free consultation for disaster-related legal issues
 
 Emergency Contacts:
-- Local Emergency Management: [Phone Number]
-- Disaster Relief Hotline: [Phone Number]
-- Mental Health Crisis Line: [Phone Number]
+- Local Emergency Management: 911
+- FEMA Helpline: 1-800-621-3362
+- Disaster Distress Helpline: call or text 1-800-985-5990
+- Text "TalkWithUs" to 66746
 
 Safety Tips:
 - Follow official evacuation instructions
