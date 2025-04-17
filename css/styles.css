@@ -4,7 +4,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
-    background-image: url('images/watchdutybg.png');
+    background-image: url('images/disaster_bg.jpg');
     background-size: cover; /* Ensures the image covers the entire page */
     background-position: center center; /* Centers the background image */
     background-repeat: no-repeat; /* Ensures the image doesn't repeat */
@@ -159,6 +159,10 @@ header h1 {
     position: relative;
     width: 100%;
     margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adds space between elements */
+    width: 100%;
 }
 
 .input-container input {
@@ -402,4 +406,45 @@ button:hover {
 .bot-message, .user-message {
     word-wrap: break-word;
     overflow-wrap: break-word;
+}
+
+/* Add this to your existing CSS file */
+
+/* Style for the microphone button */
+#micButton {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Add some space between the mic and send buttons */
+}
+
+#micButton:hover {
+    background-color: #0056b3;
+}
+
+/* Ensure the microphone icon is centered */
+#micButton i {
+    font-size: 1rem;
+}
+
+#speakerButton {
+    background: #007bff; /* Add background to make it visible */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+#speakerButton:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+#speakerButton i {
+    vertical-align: middle;
 }
